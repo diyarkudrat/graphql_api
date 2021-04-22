@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { gql, useQuery } from '@apollo/client';
+import { gql } from '@apollo/client';
 import { client } from '../index';
-
+import "./styles/Weather.css";
+import Description from './Description';
 
 function Weather(props) {
     const [zip, setZip] = useState('');
@@ -10,25 +11,26 @@ function Weather(props) {
 
     async function getWeather() {
         try {
-            const json = await client.query({
-                query: gql`
-                  query {
-                      getWeather(zip: ${zip}, unit: ${unit}) {
-                          location
-                          temperature
-                          description
-                          feelsLike
-                          tempMin
-                          temoMax
-                          status
-                      }
-                  }`
-            })
-            setWeather(json);
+          debugger;
+          const json = await client.query({
+            query: gql`
+              query {
+                getWeather(zip: ${zip}, unit: ${unit}) {
+                  location
+                  temperature
+                  description
+                  feelsLike
+                  tempMin
+                  tempMax
+                  status
+                }
+              }`
+          })
+          setWeather(json)
         } catch(err) {
-            console.log("Error", err.message);
+          console.log(err.message)
         }
-    }
+      }
 
     return (
         <div className="weather">
@@ -72,6 +74,7 @@ function Weather(props) {
                     <label htmlFor="K">Kelvin</label>
                 </div>
             </form>
+            { weather ? <Description data={weather.data.getWeather} unit={unit} /> : null }
         </div>
     );
 }
