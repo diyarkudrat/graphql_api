@@ -8,19 +8,16 @@ require('dotenv').config();
 
 // GraphQL Schemas
 const schema = buildSchema(`
-type Test {
-    message: String!
-}
-
-enum Units {
+enum Unit {
     standard
     metric
     imperial
 }
 
 type Weather {
-    temperature: Float!
-    description: String!
+    location: String
+    temperature: Float
+    description: String
     feelsLike: Float
     tempMin: Float
     tempMax: Float
@@ -29,26 +26,28 @@ type Weather {
 }
 
 type Query {
-    getWeather(zip: Int!, units: Units): Weather!
+    getWeather(zip: Int!, unit: Unit): Weather
 }
 `)
 
 // Resolvers
 const root = {
-    getWeather: async ({ zip, units = 'imperial' }) => {
+    getWeather: async ({ zip, unit }) => {
         const units = { standard: '', metric: 'metric', imperial: 'imperial' };
 
         const apiKey = process.env.OPENWEATHERMAP_API_KEY;
         const url = `https://api.openweathermap.org/data/2.5/weather?zip=${zip}&appid=${apiKey}&units=${units[unit]}`;
 
-        const res = fetch(url);
+        const res = await fetch(url);
         const json = await res.json();
+        console.log('DATA', json);
 
         const status = parseInt(json.cod);
 
         if (status != 200) {
             return { status, message: json.message }
         } else {
+            const location = json.name;
             const temperature = json.main.temp;
             const description = json.weather[0].description;
             const feelsLike = json.main.feels_like;
@@ -56,6 +55,7 @@ const root = {
             const tempMax = json.main.temp_max;
             
             return { 
+                location,
                 temperature,
                 description,
                 feelsLike,
