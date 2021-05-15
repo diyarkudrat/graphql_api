@@ -57,6 +57,7 @@ function Weather(props) {
                     />
                     <label htmlFor="F">Fahrenheit</label>
                     <input
+                      input="F"
                       type="radio"
                       value="metric"
                       name="Celsius"
@@ -65,6 +66,7 @@ function Weather(props) {
                     />
                     <label htmlFor="C">Celsius</label>
                     <input
+                      id="C"
                       type="radio"
                       value="default"
                       name="Kelvin"
