@@ -57,10 +57,10 @@ function Weather(props) {
                     />
                     <label htmlFor="F">Fahrenheit</label>
                     <input
-                      input="F"
+                      id="F"
                       type="radio"
                       value="metric"
-                      name="Celsius"
+                      name="Fahrenheit"
                       checked={ unit === "metric" ? true : false }
                       onChange={(e) => setUnit(e.target.value)}
                     />
@@ -69,11 +69,19 @@ function Weather(props) {
                       id="C"
                       type="radio"
                       value="default"
-                      name="Kelvin"
+                      name="Celsius"
                       checked={ unit === "default" ? true : false }
                       onChange={(e) => setUnit(e.target.value)}
                     />
                     <label htmlFor="K">Kelvin</label>
+                    <input
+                      id="K"
+                      type="radio"
+                      value="standard"
+                      name="Kelvin"
+                      checked={ unit === "default" ? true : false }
+                      onChange={(e) => setUnit(e.target.value)}
+                    />
                 </div>
             </form>
             { weather ? <Description data={weather.data.getWeather} unit={unit} /> : null }
